@@ -5,5 +5,6 @@ public class PhoneTest {
         phone.setPrice(5999);
         phone.call();
         phone.playGame();
+        System.out.println("手机名称：" + phone.getName());
     }
 }
