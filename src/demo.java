@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -36,7 +37,19 @@ public class demo {
         }
     }
     public static void main(String[] args) {
-        testPartition2();
+        String[] testCases = {
+            "Hello World",
+            "Hello World  ",
+            "Hello",
+            "   ",
+            ""
+        };
+        for (String str : testCases) {
+            int length = getLastWordLength(str);
+            System.out.println("字符串: \"" + str + "\"");
+            System.out.println("最后一个单词的长度: " + length);
+            System.out.println();
+        }
     }
     
     public static void testPartition2() {
@@ -172,5 +185,75 @@ public class demo {
         int temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
+    }
+    // 生成验证码，可以是小写，也可以是大写，还可以是数字，长度为5，其中4个是字母，一个数字
+    public static String generateVerificationCode(){
+        char []newArr = new char[5];
+        char []arr = new char[52];
+        for(int i=0;i<26;i++){
+            arr[i] = (char)('a' + i);
+        }
+        for(int i=26;i<arr.length;i++){
+            arr[i] = (char)('A' + (i - 26));
+        }
+        Random random = new Random();
+        for(int i=0;i<4;i++){
+            int index = random.nextInt(52);
+            newArr[i] = arr[index];
+        }
+        char ch = (char)('0' + random.nextInt(10));
+        newArr[4] = ch;
+        int swap_index = random.nextInt(5);
+        if (swap_index != 4) {
+            char temp = newArr[swap_index];
+            newArr[swap_index] = newArr[4];
+            newArr[4] = temp;
+        }
+        return new String(newArr);
+    }
+    // 两个字符串相乘，这里不考虑字符串整数过大，导致的类型溢出问题
+    public static int stringMultiply(String str1, String str2) {
+        int []nums1 = new int[str1.length()];
+        int []nums2 = new int[str2.length()];
+        stringToArr(str1, nums1);
+        stringToArr(str2, nums2);
+        System.out.println(Arrays.toString(nums1));
+        System.out.println(Arrays.toString(nums2));
+        int num1 = arrToNum(nums1);
+        int num2 = arrToNum(nums2);
+        return num1 * num2;
+    }
+    public static int arrToNum(int []nums){
+        int res = 0;
+        int count = 1;
+        for(int i=nums.length - 1;i >= 0;i--){
+            res = res + nums[i] * count;
+            count *= 10;
+        }
+        // 3 * 1 = 3 count = 10
+        // 3 + 2 * 10 = 23 count = 100
+        // 23 + 100 = 123
+        return res;
+    }
+    public static void stringToArr(String s,int []nums){
+        for(int i = 0;i < s.length();i++){
+            nums[i] = s.charAt(i) - '0';
+        }
+    }
+    // 输入一个字符串，该字符串中包含若干个单词，得到最后一个单词的长度
+    public static int getLastWordLength(String str){
+        if (str == null || str.isEmpty()) {
+            return 0;
+        }
+        int count = 0;
+        int i = str.length() - 1;
+        while (i >= 0 && str.charAt(i) == ' ') {
+            i--;
+        }
+        while (i >= 0 && str.charAt(i) != ' ') {
+            count++;
+            i--;
+        }
+        return count;
     }
 }
